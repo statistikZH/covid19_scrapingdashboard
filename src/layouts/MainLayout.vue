@@ -3,7 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          Statistische Amt Kanton Zürich - Covid-19 Scraping Dashboard
+          Aktuelle SARS-CoV-2 Fallzahlen der Kantone und Fürstentum Liechtenstein (FL)
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
