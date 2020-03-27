@@ -79,13 +79,6 @@ export default {
           sortable: true
         },
         {
-          name: 'source',
-          align: 'left',
-          label: 'Offizielle Quelle',
-          field: 'source',
-          sortable: true
-        },
-        {
           name: 'csv',
           align: 'left',
           label: 'Fallzahlen',
@@ -94,9 +87,8 @@ export default {
         {
           name: 'source',
           align: 'left',
-          label: 'Fallzahlen',
-          field: 'source',
-          sortable: true
+          label: 'Offizielle Quelle',
+          field: 'source'
         }
       ],
       pagination: {
@@ -151,11 +143,11 @@ export default {
             for (const obj of array) {
               const item = data.find(o => o.abk === obj.abbreviation_canton_and_fl)
               if (!item.date) {
-                const date = obj.time !== '' && obj.time !== '""' ? obj.date + ' ' + obj.time : obj.date
-                item.date = date
+                item.date = obj.time !== '' && obj.time !== '""' ? obj.date + ' ' + obj.time : obj.date
                 item.source = obj.source
 
                 // add color
+                const date = obj.time !== '' && obj.time !== '""' ? obj.date + 'T' + obj.time + ':00' : obj.date
                 const dateTime = this.$statUtils.sortDateToSeconds(date)
                 if (dateTime >= today) {
                   item.color = this.states[0]
