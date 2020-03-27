@@ -1,7 +1,11 @@
 <template>
   <q-page class="q-pa-sm">
+
+    <!-- Subtitle -->
+    <h2>Aufbereitet vom Statistischen Amt Kanton Zürich</h2>
+
     <!-- legend -->
-    <ul>
+    <ul class="q-mb-lg">
       <li v-for="state in states" :key="state.id" class="q-mb-sm">
         <q-btn round flat size="sm" class="q-mr-sm" :style="'background:' + state.color" />{{ state.desc }}
       </li>
