@@ -26,9 +26,20 @@
           <q-td key="date" :props="props" :style="`background:${props.row.color.color}`">
             {{ $statUtils.sortToLabelDate(props.row.date) }}
           </q-td>
+          <q-td key="csv" :props="props">
+            <a :href="props.row.csv" target="_blank">
+              <q-chip square>
+                <q-avatar icon="call_made" color="grey-6" text-color="white" />
+                CSV
+              </q-chip>
+            </a>
+          </q-td>
           <q-td key="source" :props="props">
             <a :href="props.row.source" target="_blank">
-              {{ props.row.source }}
+              <q-chip square>
+                <q-avatar icon="call_made" color="grey-6" text-color="white" />
+                {{ props.row.source }}
+              </q-chip>
             </a>
           </q-td>
         </q-tr>
@@ -63,14 +74,27 @@ export default {
         {
           name: 'date',
           align: 'left',
-          label: 'Datum',
+          label: 'Datum, Zeit',
           field: 'date',
           sortable: true
         },
         {
           name: 'source',
           align: 'left',
-          label: 'Source',
+          label: 'Offizielle Quelle',
+          field: 'source',
+          sortable: true
+        },
+        {
+          name: 'csv',
+          align: 'left',
+          label: 'Fallzahlen',
+          field: 'csv'
+        },
+        {
+          name: 'source',
+          align: 'left',
+          label: 'Fallzahlen',
           field: 'source',
           sortable: true
         }
@@ -131,6 +155,7 @@ export default {
                 item.date = date
                 item.source = obj.source
 
+                // add color
                 const dateTime = this.$statUtils.sortDateToSeconds(date)
                 if (dateTime >= today) {
                   item.color = this.states[0]
@@ -139,6 +164,9 @@ export default {
                 } else {
                   item.color = this.states[2]
                 }
+
+                // add csv
+                item.csv = this.urlRepo + 'fallzahlen_kanton_total_csv/COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
               }
             }
 
