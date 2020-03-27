@@ -1,3 +1,8 @@
+Demo:
+<a href="http://www.web.statistik.zh.ch/covid19_dashboard/index.html#/">link</a>
+
+For develop:
+
 # covid19_ogd (covid19_ogd)
 
 A Quasar Framework app
