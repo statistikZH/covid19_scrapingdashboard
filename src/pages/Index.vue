@@ -136,8 +136,9 @@ export default {
               return this.$statUtils.sortDateToSeconds(objB.date) - this.$statUtils.sortDateToSeconds(objA.date)
             })
 
-            const today = this.$statUtils.sortDateToSeconds(this.$statUtils.today())
-            const todayMinus24h = today - (24 * 60 * 60)
+            const today = this.$statUtils.todayInSeconds()
+            const now = this.$statUtils.nowInSeconds()
+            const nowMinus24h = now - 86400 // 24 * 60 * 60
 
             // take only first one
             for (const obj of array) {
@@ -147,11 +148,11 @@ export default {
                 item.source = obj.source
 
                 // add color
-                const date = obj.time !== '' && obj.time !== '""' ? obj.date + 'T' + obj.time + ':00' : obj.date
+                const date = obj.time !== '' && obj.time !== '""' ? obj.date + 'T' + obj.time + ':00Z' : obj.date
                 const dateTime = this.$statUtils.sortDateToSeconds(date)
                 if (dateTime >= today) {
                   item.color = this.states[0]
-                } else if (dateTime > todayMinus24h) {
+                } else if (dateTime >= nowMinus24h) {
                   item.color = this.states[1]
                 } else {
                   item.color = this.states[2]

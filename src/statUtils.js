@@ -14,18 +14,13 @@ export default {
   sortDateToSeconds (ddddmmyymmss) {
     return new Date(ddddmmyymmss).getTime() / 1000
   },
-  today () {
-    const today = new Date()
-    let dd = today.getDate()
-    if (dd < 10) {
-      dd = '0' + dd
-    }
-    let mm = today.getMonth() + 1
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-    const yyyy = today.getFullYear()
-    return `${yyyy}-${mm}-${dd}`
+  todayInSeconds () {
+    const date = new Date()
+    date.setHours(0, 0, 0, 0)
+    return date / 1000
+  },
+  nowInSeconds () {
+    return Math.floor(new Date() / 1000)
   },
   formatNumber (number) {
     if (this.isNumeric(number)) {
