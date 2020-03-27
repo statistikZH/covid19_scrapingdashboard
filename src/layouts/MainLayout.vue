@@ -5,6 +5,7 @@
         <q-toolbar-title>
           Aktuelle SARS-CoV-2 Fallzahlen der Kantone und Fürstentum Liechtenstein (FL)
         </q-toolbar-title>
+        <img src="../assets/ktzh-logo-mobile.svg" alt="Logo Kanton Zürich" />
       </q-toolbar>
     </q-header>
 
