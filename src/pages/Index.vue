@@ -12,7 +12,9 @@
     </ul>
 
     <!-- table -->
+    <q-linear-progress v-if="data.length === 0" indeterminate />
     <q-table
+      v-else
       :data="data"
       :columns="columns"
       :pagination.sync="pagination"
