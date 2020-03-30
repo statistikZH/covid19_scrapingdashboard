@@ -46,9 +46,17 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-slot:bottom>
+      </template>
     </q-table>
   </q-page>
 </template>
+
+<style>
+.q-table__bottom {
+  display: none;
+}
+</style>
 
 <script>
 export default {
@@ -96,7 +104,7 @@ export default {
       pagination: {
         sortBy: 'abk',
         descending: false,
-        rowsPerPage: 27 + 1
+        rowsPerPage: 0
       },
       // data defs ---------------------------------------------------------------------------
       data: []
