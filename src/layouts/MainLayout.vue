@@ -16,7 +16,12 @@
 
     <q-footer elevated>
       <q-toolbar>
-        <q-toolbar-title>{{ version }} <a href="https://github.com/statistikZH/covid19_scrapingdashboard/blob/master/CHANGELOG.md" style="color:#ccc">changelog</a></q-toolbar-title>
+        <q-toolbar-title>
+          {{ version }}
+          <a href="https://github.com/statistikZH/covid19_scrapingdashboard/blob/master/CHANGELOG.md" style="color:#ccc">
+            changelog
+          </a>
+        </q-toolbar-title>
       </q-toolbar>
     </q-footer>
 
