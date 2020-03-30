@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'PageIndex',
+  name: 'UiLink',
   props: {
     href: {
       type: String,

@@ -2,7 +2,12 @@
   <q-page class="q-pa-sm">
 
     <!-- Subtitle -->
-    <h2>Aufbereitet vom Statistischen Amt Kanton Zürich</h2>
+    <h2 class="q-ml-md">Aufbereitet vom Statistischen Amt Kanton Zürich</h2>
+
+    <!-- main repo -->
+    <div class="q-ma-md">
+      Daten / Metadaten: <ui-link :href="urlRepo" :label="urlRepo" />
+    </div>
 
     <!-- legend -->
     <ul class="q-mb-lg">
@@ -55,7 +60,7 @@
 </style>
 
 <script>
-import UiLink from 'src/components/Link.vue'
+import UiLink from 'src/components/UiLink.vue'
 
 export default {
   name: 'PageIndex',
@@ -82,26 +87,30 @@ export default {
           align: 'center',
           label: 'Kanton / FL',
           field: 'abk',
-          sortable: true
+          sortable: true,
+          headerClasses: 'bg-grey-4'
         },
         {
           name: 'date',
           align: 'left',
           label: 'Datum, Zeit',
           field: 'date',
-          sortable: true
+          sortable: true,
+          headerClasses: 'bg-grey-4'
         },
         {
           name: 'csv',
           align: 'left',
           label: 'Fallzahlen',
-          field: 'csv'
+          field: 'csv',
+          headerClasses: 'bg-grey-4'
         },
         {
           name: 'source',
           align: 'left',
           label: 'Offizielle Quelle',
-          field: 'source'
+          field: 'source',
+          headerClasses: 'bg-grey-4'
         }
       ],
       pagination: {
