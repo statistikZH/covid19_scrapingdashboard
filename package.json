@@ -1,6 +1,6 @@
 {
   "name": "covid19_ogd",
-  "version": "0.0.4-0",
+  "version": "0.0.4",
   "description": "A Quasar Framework app",
   "productName": "covid19_ogd",
   "cordovaId": "org.cordova.quasar.app",
