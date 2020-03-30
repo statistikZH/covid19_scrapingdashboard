@@ -4,13 +4,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.0.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v0.0.5...v1.0.0) (2020-03-30)
 
-### [0.0.5](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v0.0.5-0...v0.0.5) (2020-03-30)
-
-### [0.0.5-0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v0.0.4...v0.0.5-0) (2020-03-30)
-
-### [0.0.2](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v0.0.1...v0.0.2) (2020-03-30)
-
-
 ### Features
 
 * add standard-version ([d10fcee](https://github.com/statistikZH/covid19_scrapingdashboard/commit/d10fcee871384c31973da7a1f7da642771730b74))
