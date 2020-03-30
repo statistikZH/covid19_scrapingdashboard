@@ -1,6 +1,6 @@
 {
   "name": "covid19_ogd",
-  "version": "0.0.3",
+  "version": "0.0.4-0",
   "description": "A Quasar Framework app",
   "productName": "covid19_ogd",
   "cordovaId": "org.cordova.quasar.app",
@@ -9,7 +9,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "release": "standard-version"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
