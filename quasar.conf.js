@@ -1,6 +1,23 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
+const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const gitRevisionPlugin = new GitRevisionPlugin({ versionCommand: 'describe --always --tags --dirty' })
+
+function getAppVersion () {
+  return JSON.stringify(gitRevisionPlugin.version())
+}
+
+function getShortAppVersion () {
+  var version = gitRevisionPlugin.version()
+  var versionArray = version.split('-')
+  var versionShort = versionArray[0]
+  if (versionArray[1]) {
+    versionShort = versionShort + '-' + versionArray[1]
+  }
+  return JSON.stringify(versionShort)
+}
+
 module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
@@ -57,6 +74,10 @@ module.exports = function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      env: {
+        APP_VERSION: getAppVersion(),
+        APP_VERSION_SHORT: getShortAppVersion()
+      },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
       // rtl: false, // https://quasar.dev/options/rtl-support
