@@ -1,0 +1,24 @@
+<template>
+  <a :href="href" target="_blank">
+    <q-chip square>
+      <q-avatar icon="call_made" color="grey-6" text-color="white" />
+      {{ label }}
+    </q-chip>
+  </a>
+</template>
+
+<script>
+export default {
+  name: 'PageIndex',
+  props: {
+    href: {
+      type: String,
+      default: '#'
+    },
+    label: {
+      type: String,
+      default: 'Link'
+    }
+  }
+}
+</script>

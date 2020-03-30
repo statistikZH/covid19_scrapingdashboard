@@ -29,26 +29,17 @@
             {{ $statUtils.sortToLabelDate(props.row.date) }}
           </q-td>
           <q-td key="csv" :props="props">
-            <a :href="props.row.csv" target="_blank">
-              <q-chip square>
-                <q-avatar icon="call_made" color="grey-6" text-color="white" />
-                CSV
-              </q-chip>
-            </a>
+            <ui-link :href="props.row.csv" :label="CSV" />
           </q-td>
           <q-td key="source" :props="props">
-            <a :href="props.row.source" target="_blank">
-              <q-chip square>
-                <q-avatar icon="call_made" color="grey-6" text-color="white" />
-                {{ props.row.source }}
-              </q-chip>
-            </a>
+            <ui-link :href="props.row.source" :label="props.row.source" />
           </q-td>
         </q-tr>
       </template>
       <template v-slot:bottom>
       </template>
     </q-table>
+
   </q-page>
 </template>
 
@@ -59,14 +50,21 @@
 </style>
 
 <script>
+import UiLink from 'src/components/Link.vue'
+
 export default {
   name: 'PageIndex',
+  components: {
+    UiLink
+  },
   data () {
     return {
       // custom defs ---------------------------------------------------------------------------
-      urlRepo: 'https://raw.githubusercontent.com/openZH/covid_19/master/',
-      urlOverwiew: 'mappingCanton_BFS.csv',
-      urlTotal: 'COVID19_Fallzahlen_CH_total.csv',
+      urlRepoRaw: 'https://raw.githubusercontent.com/openZH/covid_19/',
+      urlRepo: 'https://github.com/openZH/covid_19/',
+      license: 'https://github.com/statistikZH/covid19_scrapingdashboard/blob/master/LICENSE',
+      urlOverwiew: 'master/mappingCanton_BFS.csv',
+      urlTotal: 'master/COVID19_Fallzahlen_CH_total.csv',
       states: [
         { id: 1, color: '#7fc97f', desc: 'Daten für heute vorhanden' },
         { id: 2, color: '#beaed4', desc: 'Daten für heute noch ausstehend' },
@@ -118,7 +116,7 @@ export default {
     bfs: "01"
     */
     this.$statUtils.loadCSV(
-      this.urlRepo + this.urlOverwiew,
+      this.urlRepoRaw + this.urlOverwiew,
       (array) => {
         const data = array
 
@@ -139,7 +137,7 @@ export default {
         time: ""
         */
         this.$statUtils.loadCSV(
-          this.urlRepo + this.urlTotal,
+          this.urlRepoRaw + this.urlTotal,
           (array) => {
             // sort by date
             array.sort((objA, objB) => {
@@ -169,7 +167,7 @@ export default {
                 }
 
                 // add csv
-                item.csv = this.urlRepo + 'fallzahlen_kanton_total_csv/COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
+                item.csv = this.urlRepo + 'tree/master/fallzahlen_kanton_total_csv/COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
               }
             }
 
