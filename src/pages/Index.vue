@@ -40,6 +40,11 @@
       </template>
     </q-table>
 
+    <!-- license -->
+    <div class="q-ma-md">
+      MIT License: <ui-link :href="license" />
+    </div>
+
   </q-page>
 </template>
 
