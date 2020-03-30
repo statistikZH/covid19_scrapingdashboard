@@ -39,6 +39,8 @@
           <q-td key="source" :props="props">
             <ui-link :href="props.row.source" :label="props.row.source" />
           </q-td>
+          <q-td key="empty" :props="props">
+          </q-td>
         </q-tr>
       </template>
       <template v-slot:bottom>
@@ -88,7 +90,8 @@ export default {
           label: 'Kanton / FL',
           field: 'abk',
           sortable: true,
-          headerClasses: 'bg-grey-4'
+          headerClasses: 'bg-grey-4',
+          style: 'width:100px;'
         },
         {
           name: 'date',
@@ -96,20 +99,29 @@ export default {
           label: 'Datum, Zeit',
           field: 'date',
           sortable: true,
-          headerClasses: 'bg-grey-4'
+          headerClasses: 'bg-grey-4',
+          style: 'width:130px;'
         },
         {
           name: 'csv',
           align: 'left',
           label: 'Fallzahlen',
           field: 'csv',
-          headerClasses: 'bg-grey-4'
+          headerClasses: 'bg-grey-4',
+          style: 'width:150px;'
         },
         {
           name: 'source',
           align: 'left',
           label: 'Offizielle Quelle',
           field: 'source',
+          headerClasses: 'bg-grey-4'
+        },
+        {
+          name: 'empty',
+          align: 'left',
+          label: '',
+          field: 'empty',
           headerClasses: 'bg-grey-4'
         }
       ],
