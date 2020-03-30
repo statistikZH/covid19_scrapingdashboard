@@ -7,7 +7,7 @@
     <!-- legend -->
     <ul class="q-mb-lg">
       <li v-for="state in states" :key="state.id" class="q-mb-sm">
-        <q-btn round flat size="sm" class="q-mr-sm" :style="'background:' + state.color" />{{ state.desc }}
+        <q-btn round flat size="xs" class="q-mr-sm" :style="'background:' + state.color" />{{ state.desc }}
       </li>
     </ul>
 
