@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v0.0.1...v0.0.2) (2020-03-30)
+
+
+### Features
+
+* add standard-version ([d10fcee](https://github.com/statistikZH/covid19_scrapingdashboard/commit/d10fcee871384c31973da7a1f7da642771730b74))
+
 ### 0.0.1 (2020-03-30)
 
 
