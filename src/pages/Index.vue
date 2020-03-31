@@ -34,7 +34,7 @@
             {{ $statUtils.sortToLabelDate(props.row.date) }}
           </q-td>
           <q-td key="csv" :props="props">
-            <ui-link :href="props.row.csv" :label="CSV" />
+            <ui-link :href="props.row.csv" label="CSV" />
           </q-td>
           <q-td key="source" :props="props">
             <ui-link :href="props.row.source" :label="props.row.source" />
