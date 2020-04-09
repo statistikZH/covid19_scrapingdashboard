@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v1.0.0...v1.1.0) (2020-04-09)
+
+
+### Features
+
+* change paths to v2 ([3c1f172](https://github.com/statistikZH/covid19_scrapingdashboard/commit/3c1f172bda264a10f8e4fa36c03973ab102e2855))
+
+
+### Bug Fixes
+
+* CSV label to string ([c2fbdf5](https://github.com/statistikZH/covid19_scrapingdashboard/commit/c2fbdf5da313af10181c14caf221628044124c54))
+* strip doublequotes ([63cb85d](https://github.com/statistikZH/covid19_scrapingdashboard/commit/63cb85dab060d19384d240d96ef45f50ea7a9432))
+
 ## [1.0.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v0.0.5...v1.0.0) (2020-03-30)
 
 ### Features
