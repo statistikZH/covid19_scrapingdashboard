@@ -76,7 +76,8 @@ export default {
       urlRepo: 'https://github.com/openZH/covid_19/',
       license: 'https://github.com/statistikZH/covid19_scrapingdashboard/blob/master/LICENSE',
       urlOverwiew: 'master/mappingCanton_BFS.csv',
-      urlTotal: 'master/COVID19_Fallzahlen_CH_total.csv',
+      urlTotal: 'master/COVID19_Fallzahlen_CH_total_v2.csv',
+      urlFolder: 'tree/master/fallzahlen_kanton_total_csv_v2/',
       states: [
         { id: 1, color: '#7fc97f', desc: 'Daten für heute vorhanden' },
         { id: 2, color: '#beaed4', desc: 'Daten für heute noch ausstehend' },
@@ -193,7 +194,7 @@ export default {
                 }
 
                 // add csv
-                item.csv = this.urlRepo + 'tree/master/fallzahlen_kanton_total_csv/COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
+                item.csv = this.urlRepo + this.urlFolder + 'COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
               }
             }
 
