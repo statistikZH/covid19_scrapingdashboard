@@ -10,21 +10,38 @@
     </div>
 
     <!-- legend -->
-    <ul class="q-mb-lg">
-      <li v-for="state in states" :key="state.id" class="q-mb-sm">
-        <q-btn round flat size="xs" class="q-mr-sm" :style="'background:' + state.color" />{{ state.desc }}
-      </li>
-    </ul>
+    <div class="row">
+      <div>
+        <ul class="q-mb-lg">
+          <li v-for="state in states" :key="state.id" class="q-mb-sm">
+            <q-btn flat size="xs" class="q-mr-sm" :style="'height:24px; pointer-events:none; background:' + state.color" />{{ state.desc }}
+          </li>
+        </ul>
+      </div>
+      <div>
+        <ul class="q-mb-lg">
+          <li v-for="state in states" :key="state.id" class="q-mb-sm">
+            <q-btn round flat size="xs" class="q-mr-sm" :style="'pointer-events:none; background:' + state.color" />{{ state.desc2 }}
+            <span class="text-caption q-ml-sm" v-if="state.note">({{ state.note }})</span>
+          </li>
+        </ul>
+      </div>
+    </div>
 
     <!-- table -->
     <q-linear-progress v-if="data.length === 0" indeterminate />
     <q-table
       v-else
       :data="data"
-      :columns="columns"
+      :columns="columnsWithIndikatoren"
       :pagination.sync="pagination"
       row-key="name"
     >
+      <template v-slot:header-cell="props">
+        <q-th :props="props" style="padding: 5px">
+          {{ props.col.label }}
+        </q-th>
+      </template>
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td key="abk" :props="props">
@@ -36,8 +53,11 @@
           <q-td key="csv" :props="props">
             <ui-link :href="props.row.csv" label="CSV" />
           </q-td>
+          <q-td v-for="item in indikatoren" :key="item" :props="props">
+            <q-btn v-if="props.row[item].color" round flat size="xs" :style="'pointer-events:none; background:' + props.row[item].color.color" />
+          </q-td>
           <q-td key="source" :props="props">
-            <ui-link :href="props.row.source" :label="props.row.source" />
+            <ui-link v-for="(item, i) in props.row.source" :key="i" :href="item" :label="item.substr(0, 20) + '...'" />
           </q-td>
           <q-td key="empty" :props="props">
           </q-td>
@@ -79,9 +99,19 @@ export default {
       urlTotal: 'master/COVID19_Fallzahlen_CH_total_v2.csv',
       urlFolder: 'tree/master/fallzahlen_kanton_total_csv_v2/',
       states: [
-        { id: 1, color: '#7fc97f', desc: 'Daten für heute vorhanden' },
-        { id: 2, color: '#beaed4', desc: 'Daten für heute noch ausstehend' },
-        { id: 3, color: '#fdc086', desc: 'Daten älter als 24h' }
+        { id: 1, color: '#7fc97f', desc: 'Daten für heute verfügbar', desc2: 'Werte aktuell verfügbar', note: 'letzte Woche mindestens 5 von 7' },
+        { id: 2, color: '#beaed4', desc: 'Daten für heute noch ausstehend', desc2: 'Werte lückenhaft verfügbar', note: 'mindestens ein Eintrag' },
+        { id: 3, color: '#fdc086', desc: 'Daten älter als 24h', desc2: 'Werte nicht verfügbar' }
+      ],
+      indikatoren: [
+        'ncumul_conf',
+        'ncumul_deceased',
+        'ncumul_tested',
+        'current_hosp',
+        'current_icu',
+        'current_vent',
+        'ncumul_released',
+        'new_hosp'
       ],
       // table defs ---------------------------------------------------------------------------
       columns: [
@@ -96,7 +126,7 @@ export default {
         },
         {
           name: 'date',
-          align: 'left',
+          align: 'center',
           label: 'Datum, Zeit',
           field: 'date',
           sortable: true,
@@ -105,12 +135,13 @@ export default {
         },
         {
           name: 'csv',
-          align: 'left',
+          align: 'center',
           label: 'Fallzahlen',
           field: 'csv',
           headerClasses: 'bg-grey-4',
-          style: 'width:150px;'
+          style: 'width:130px;'
         },
+        // indikatore will be dynamically filled in, in function columnsWithIndikatoren
         {
           name: 'source',
           align: 'left',
@@ -135,7 +166,27 @@ export default {
       data: []
     }
   },
+  computed: {
+    columnsWithIndikatoren () {
+      const indikatoren = this.indikatoren.map(o => {
+        return {
+          name: o,
+          align: 'center',
+          label: o,
+          field: o,
+          headerClasses: 'bg-grey-4'
+        }
+      })
+      const columns = [...this.columns]
+      return [...columns.slice(0, 3), ...indikatoren, ...columns.slice(3, 5)]
+    }
+  },
   mounted () {
+    const today = this.$statUtils.todayInSeconds()
+    const now = this.$statUtils.nowInSeconds()
+    const oneDayInSec = 86400 // 24 * 60 * 60
+    const nowMinus24h = now - oneDayInSec
+    const nowMinusOneWeek = now - oneDayInSec * 7
     /*
     load overview data to know all the area available
 
@@ -144,9 +195,7 @@ export default {
     */
     this.$statUtils.loadCSV(
       this.urlRepoRaw + this.urlOverwiew,
-      (array) => {
-        const data = array
-
+      (data) => {
         /*
         // start of second load --------------------------------------------------------
         load updates => sort first by date and get only the newest one
@@ -171,16 +220,11 @@ export default {
               return this.$statUtils.sortDateToSeconds(objB.date) - this.$statUtils.sortDateToSeconds(objA.date)
             })
 
-            const today = this.$statUtils.todayInSeconds()
-            const now = this.$statUtils.nowInSeconds()
-            const nowMinus24h = now - 86400 // 24 * 60 * 60
-
-            // take only first one
             for (const obj of array) {
               const item = data.find(o => o.abk === obj.abbreviation_canton_and_fl)
               if (!item.date) {
                 item.date = obj.time !== '' && obj.time !== '""' ? obj.date + ' ' + obj.time : obj.date
-                item.source = obj.source
+                item.source = obj.source.split('; ')
 
                 // add color
                 const date = obj.time !== '' && obj.time !== '""' ? obj.date + 'T' + obj.time + ':00Z' : obj.date
@@ -193,11 +237,25 @@ export default {
                   item.color = this.states[2]
                 }
 
+                // add indikatoren state color
+                const subArray = array.filter(o => o.abbreviation_canton_and_fl === obj.abbreviation_canton_and_fl)
+                for (const indikator of this.indikatoren) {
+                  item[indikator] = {}
+                  const indicatorCount = subArray.filter(o => o[indikator].length > 0)
+                  const indicatorCountOneWeek = indicatorCount.filter(o => this.$statUtils.sortDateToSeconds(o.date) > nowMinusOneWeek).length
+                  if (indicatorCountOneWeek > 4) {
+                    item[indikator].color = this.states[0]
+                  } else if (indicatorCount.length > 0) {
+                    item[indikator].color = this.states[1]
+                  } else {
+                    item[indikator].color = this.states[2]
+                  }
+                }
+
                 // add csv
                 item.csv = this.urlRepo + this.urlFolder + 'COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
               }
             }
-
             this.data = data
           }
         )
