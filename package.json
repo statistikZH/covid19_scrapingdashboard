@@ -16,6 +16,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
     "quasar": "^1.9.12",
+    "url-search-params-polyfill": "^8.0.0",
     "vue-i18n": "^8.16.0"
   },
   "devDependencies": {

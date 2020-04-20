@@ -48,7 +48,7 @@
             {{ props.row.abk }}
           </q-td>
           <q-td key="date" :props="props" :style="`background:${props.row.color.color}`">
-            {{ $statUtils.sortToLabelDate(props.row.date) }}
+            {{ $utils.sortToLabelDate(props.row.date) }}
           </q-td>
           <q-td key="csv" :props="props">
             <ui-link :href="props.row.csv" label="CSV" />
@@ -99,9 +99,9 @@ export default {
       urlTotal: 'master/COVID19_Fallzahlen_CH_total_v2.csv',
       urlFolder: 'tree/master/fallzahlen_kanton_total_csv_v2/',
       states: [
-        { id: 1, color: '#7fc97f', desc: 'Daten für heute verfügbar', desc2: 'Werte aktuell verfügbar', note: 'letzte Woche mindestens 5 von 7' },
-        { id: 2, color: '#beaed4', desc: 'Daten für heute noch ausstehend', desc2: 'Werte lückenhaft verfügbar', note: 'mindestens ein Eintrag' },
-        { id: 3, color: '#fdc086', desc: 'Daten älter als 24h', desc2: 'Werte nicht verfügbar' }
+        { id: 1, color: this.$const.COLOR1, desc: 'Daten für heute verfügbar', desc2: 'Werte aktuell verfügbar', note: 'letzte Woche mindestens 5 von 7' },
+        { id: 2, color: this.$const.COLOR2, desc: 'Daten für heute noch ausstehend', desc2: 'Werte lückenhaft verfügbar', note: 'mindestens ein Eintrag' },
+        { id: 3, color: this.$const.COLOR3, desc: 'Daten älter als 24h', desc2: 'Werte nicht verfügbar' }
       ],
       indikatoren: [
         'ncumul_conf',
@@ -182,8 +182,8 @@ export default {
     }
   },
   mounted () {
-    const today = this.$statUtils.todayInSeconds()
-    const now = this.$statUtils.nowInSeconds()
+    const today = this.$utils.todayInSeconds()
+    const now = this.$utils.nowInSeconds()
     const oneDayInSec = 86400 // 24 * 60 * 60
     const nowMinus24h = now - oneDayInSec
     const nowMinusOneWeek = now - oneDayInSec * 7
@@ -193,7 +193,7 @@ export default {
     abk: "ZH"
     bfs: "01"
     */
-    this.$statUtils.loadCSV(
+    this.$utils.loadCSV(
       this.urlRepoRaw + this.urlOverwiew,
       (data) => {
         /*
@@ -212,12 +212,12 @@ export default {
         source: "https://www.ge.ch/document/covid-19-situation-epidemiologique-geneve/telecharger"
         time: ""
         */
-        this.$statUtils.loadCSV(
+        this.$utils.loadCSV(
           this.urlRepoRaw + this.urlTotal,
           (array) => {
             // sort by date
             array.sort((objA, objB) => {
-              return this.$statUtils.sortDateToSeconds(objB.date) - this.$statUtils.sortDateToSeconds(objA.date)
+              return this.$utils.sortDateToSeconds(objB.date) - this.$utils.sortDateToSeconds(objA.date)
             })
 
             for (const obj of array) {
@@ -228,7 +228,7 @@ export default {
 
                 // add color
                 const date = obj.time !== '' && obj.time !== '""' ? obj.date + 'T' + obj.time + ':00Z' : obj.date
-                const dateTime = this.$statUtils.sortDateToSeconds(date)
+                const dateTime = this.$utils.sortDateToSeconds(date)
                 if (dateTime >= today) {
                   item.color = this.states[0]
                 } else if (dateTime >= nowMinus24h) {
@@ -242,7 +242,7 @@ export default {
                 for (const indikator of this.indikatoren) {
                   item[indikator] = {}
                   const indicatorCount = subArray.filter(o => o[indikator].length > 0)
-                  const indicatorCountOneWeek = indicatorCount.filter(o => this.$statUtils.sortDateToSeconds(o.date) > nowMinusOneWeek).length
+                  const indicatorCountOneWeek = indicatorCount.filter(o => this.$utils.sortDateToSeconds(o.date) > nowMinusOneWeek).length
                   if (indicatorCountOneWeek > 4) {
                     item[indikator].color = this.states[0]
                   } else if (indicatorCount.length > 0) {
