@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v1.2.0...v1.3.0) (2020-04-20)
+
+
+### Features
+
+* add color get props ([6d722d9](https://github.com/statistikZH/covid19_scrapingdashboard/commit/6d722d994eef35051c06249d32cd66a562842e9f))
+
 ## [1.2.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v1.1.0...v1.2.0) (2020-04-15)
 
 
