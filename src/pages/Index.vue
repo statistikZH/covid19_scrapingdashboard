@@ -54,7 +54,16 @@
             <ui-link :href="props.row.csv" label="CSV" />
           </q-td>
           <q-td v-for="item in indikatoren" :key="item" :props="props">
-            <q-btn v-if="props.row[item].color" round flat size="xs" :style="'pointer-events:none; background:' + props.row[item].color.color" />
+            <q-icon
+              v-if="props.row[item].color"
+              :name="props.row[item].hoverInfo.join('') !== '' ? 'info' : 'brightness_1'"
+              size="md"
+              :style="'color:' + props.row[item].color.color"
+            >
+              <q-tooltip content-style="font-size:14px" v-if="props.row[item].hoverInfo.join('') !== ''">
+                {{ props.row[item].hoverInfo.join(', ') }}
+              </q-tooltip>
+            </q-icon>
           </q-td>
           <q-td key="source" :props="props">
             <ui-link v-for="(item, i) in props.row.source" :key="i" :href="item" :label="item.substr(0, 20) + '...'" />
@@ -98,6 +107,8 @@ export default {
       urlOverwiew: 'master/mappingCanton_BFS.csv',
       urlTotal: 'master/COVID19_Fallzahlen_CH_total_v2.csv',
       urlFolder: 'tree/master/fallzahlen_kanton_total_csv_v2/',
+      urlHoverInfo: 'https://raw.githubusercontent.com/openZH/covid19_sources_caseNumbers/master/COVID19_Quellen_CH_total_v2.csv',
+      urlInfoExplained: 'https://raw.githubusercontent.com/openZH/covid19_sources_caseNumbers/master/COVID19_Quellen_Informationen.csv',
       states: [
         { id: 1, color: this.$const.COLOR1, desc: 'Daten für heute verfügbar', desc2: 'Werte aktuell verfügbar', note: 'letzte Woche mindestens 5 von 7' },
         { id: 2, color: this.$const.COLOR2, desc: 'Daten für heute noch ausstehend', desc2: 'Werte lückenhaft verfügbar', note: 'mindestens ein Eintrag' },
@@ -163,7 +174,8 @@ export default {
         rowsPerPage: 0
       },
       // data defs ---------------------------------------------------------------------------
-      data: []
+      data: [],
+      hoverInfo: []
     }
   },
   computed: {
@@ -215,48 +227,70 @@ export default {
         this.$utils.loadCSV(
           this.urlRepoRaw + this.urlTotal,
           (array) => {
-            // sort by date
-            array.sort((objA, objB) => {
-              return this.$utils.sortDateToSeconds(objB.date) - this.$utils.sortDateToSeconds(objA.date)
-            })
+            this.$utils.loadCSV(
+              this.urlInfoExplained,
+              (explained) => {
+                // load source hover info
+                this.$utils.loadCSV(
+                  this.urlHoverInfo,
+                  (hoverInfo) => {
+                    // sort by date
+                    array.sort((objA, objB) => {
+                      return this.$utils.sortDateToSeconds(objB.date) - this.$utils.sortDateToSeconds(objA.date)
+                    })
 
-            for (const obj of array) {
-              const item = data.find(o => o.abk === obj.abbreviation_canton_and_fl)
-              if (!item.date) {
-                item.date = obj.time !== '' && obj.time !== '""' ? obj.date + ' ' + obj.time : obj.date
-                item.source = obj.source.split('; ')
+                    for (const obj of array) {
+                      const item = data.find(o => o.abk === obj.abbreviation_canton_and_fl)
+                      if (!item.date) {
+                        item.date = obj.time !== '' && obj.time !== '""' ? obj.date + ' ' + obj.time : obj.date
+                        item.source = obj.source.split('; ')
 
-                // add color
-                const date = obj.time !== '' && obj.time !== '""' ? obj.date + 'T' + obj.time + ':00Z' : obj.date
-                const dateTime = this.$utils.sortDateToSeconds(date)
-                if (dateTime >= today) {
-                  item.color = this.states[0]
-                } else if (dateTime >= nowMinus24h) {
-                  item.color = this.states[1]
-                } else {
-                  item.color = this.states[2]
-                }
+                        // add color
+                        const date = obj.time !== '' && obj.time !== '""' ? obj.date + 'T' + obj.time + ':00Z' : obj.date
+                        const dateTime = this.$utils.sortDateToSeconds(date)
+                        if (dateTime >= today) {
+                          item.color = this.states[0]
+                        } else if (dateTime >= nowMinus24h) {
+                          item.color = this.states[1]
+                        } else {
+                          item.color = this.states[2]
+                        }
 
-                // add indikatoren state color
-                const subArray = array.filter(o => o.abbreviation_canton_and_fl === obj.abbreviation_canton_and_fl)
-                for (const indikator of this.indikatoren) {
-                  item[indikator] = {}
-                  const indicatorCount = subArray.filter(o => o[indikator].length > 0)
-                  const indicatorCountOneWeek = indicatorCount.filter(o => this.$utils.sortDateToSeconds(o.date) > nowMinusOneWeek).length
-                  if (indicatorCountOneWeek > 4) {
-                    item[indikator].color = this.states[0]
-                  } else if (indicatorCount.length > 0) {
-                    item[indikator].color = this.states[1]
-                  } else {
-                    item[indikator].color = this.states[2]
+                        // add indikatoren state color
+                        const subArray = array.filter(o => o.abbreviation_canton_and_fl === obj.abbreviation_canton_and_fl)
+                        for (const indikator of this.indikatoren) {
+                          item[indikator] = {}
+                          const indicatorCount = subArray.filter(o => o[indikator].length > 0)
+                          const indicatorCountOneWeek = indicatorCount.filter(o => this.$utils.sortDateToSeconds(o.date) > nowMinusOneWeek).length
+                          if (indicatorCountOneWeek > 4) {
+                            item[indikator].color = this.states[0]
+                          } else if (indicatorCount.length > 0) {
+                            item[indikator].color = this.states[1]
+                          } else {
+                            item[indikator].color = this.states[2]
+                          }
+                          // add hover info
+                          const info = hoverInfo.filter(o => o.abbreviation_canton_and_fl === obj.abbreviation_canton_and_fl && o.active === '1')
+                          // hoverInfo.filter(o => o.abbreviation_canton_and_fl === obj.abbreviation_canton_and_fl && o.from !== '' && this.$utils.sortDateToSeconds(this.$utils.labelToSortDate(o.from)) < now)
+                          item[indikator].hoverInfo = info.map(o => {
+                            let key = o[indikator + '_src']
+                            const explain = explained.find(e => e.value === key)
+                            if (explain) {
+                              key = explain.information
+                            }
+                            return key
+                          })
+                        }
+
+                        // add csv
+                        item.csv = this.urlRepo + this.urlFolder + 'COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
+                      }
+                    }
+                    this.data = data
                   }
-                }
-
-                // add csv
-                item.csv = this.urlRepo + this.urlFolder + 'COVID19_Fallzahlen_' + (item.abk === 'FL' ? '' : 'Kanton_') + item.abk + '_total.csv'
+                )
               }
-            }
-            this.data = data
+            )
           }
         )
         // end of second load --------------------------------------------------------
