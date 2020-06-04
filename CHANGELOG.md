@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v1.4.0...v1.5.0) (2020-06-04)
+
+
+### Features
+
+* add current_isolated & current_quarantined ([de620bd](https://github.com/statistikZH/covid19_scrapingdashboard/commit/de620bd4ba380a28875aa33bf9785af3ce5fe35e))
+
 ## [1.4.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v1.3.0...v1.4.0) (2020-04-22)
 
 
