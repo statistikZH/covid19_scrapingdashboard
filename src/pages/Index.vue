@@ -122,7 +122,9 @@ export default {
         'current_icu',
         'current_vent',
         'ncumul_released',
-        'new_hosp'
+        'new_hosp',
+        'current_isolated',
+        'current_quarantined'
       ],
       // table defs ---------------------------------------------------------------------------
       columns: [
@@ -214,13 +216,7 @@ export default {
 
         abbreviation_canton_and_fl: "GE"
         date: "2020-02-25"
-        ncumul_ICU: "0"
-        ncumul_conf: ""
-        ncumul_deceased: ""
-        ncumul_hosp: "0"
-        ncumul_released: ""
-        ncumul_tested: ""
-        ncumul_vent: "0"
+        ...indikatoren
         source: "https://www.ge.ch/document/covid-19-situation-epidemiologique-geneve/telecharger"
         time: ""
         */
