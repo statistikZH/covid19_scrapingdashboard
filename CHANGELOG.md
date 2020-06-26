@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v1.5.0...v1.6.0) (2020-06-26)
+
+
+### Features
+
+* raw.githack.com redirect ([51596c9](https://github.com/statistikZH/covid19_scrapingdashboard/commit/51596c9dccd39d468533aea7a1f2a36a8c225c6c))
+
 ## [1.5.0](https://github.com/statistikZH/covid19_scrapingdashboard/compare/v1.4.0...v1.5.0) (2020-06-04)
 
 
