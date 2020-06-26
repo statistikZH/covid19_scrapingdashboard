@@ -1,4 +1,5 @@
 import $axios from 'axios'
+import { Notify } from 'quasar'
 
 export default {
   sortToLabelDate (sortString) {
@@ -51,8 +52,23 @@ export default {
         }
         callback(array)
       })
-      .catch((error) => {
-        this.error = error
+      .catch(() => {
+        if (path.includes('https://raw.githubusercontent.com')) {
+          const githack = path.replace('https://raw.githubusercontent.com', 'https://raw.githack.com/')
+          Notify.create({
+            type: 'info',
+            color: 'primary',
+            position: 'top-right',
+            message: 'redirect over raw.githack.com'
+          })
+          this.loadCSV(githack, callback)
+        } else {
+          Notify.create({
+            type: 'negative',
+            position: 'top-right',
+            message: 'The file could not be loaded. Neither from raw.githubusercontent.com nor from raw.githack.com'
+          })
+        }
       })
   }
 }
